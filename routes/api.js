@@ -18,9 +18,9 @@ module.exports = function (app) {
     // get coordinate
     const row = coordinate.charAt(0);
     const col = coordinate.charAt(1);
-    console.log(coordinate.split("")[0], coordinate.split("")[1]);
+    // console.log(coordinate.split("")[0], coordinate.split("")[1]);
     console.log(row, col);
-    if (coordinate.length !== 2 || row.match(/[^a-i]/) || col.match(/[^1-9]/)) {
+    if (coordinate.length !== 2 || row.match(/[^A-I]/) || col.match(/[^1-9]/)) {
       res.json({ error: "Invalid coordinate" });
       return;
     }
