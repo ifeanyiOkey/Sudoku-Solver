@@ -1,5 +1,11 @@
 class SudokuSolver {
-  validate(puzzleString) {}
+  validate(puzzleString) {
+    if (!puzzleString) return "Required field missing";
+    if (puzzleString.length !== 81)
+      return "Expected puzzle to be 81 characters long";
+    if (puzzleString.match(/[^\d.]/g)) return "Invalid characters in puzzle";
+    return "valid";
+  }
 
   checkRowPlacement(puzzleString, row, column, value) {}
 
@@ -8,91 +14,50 @@ class SudokuSolver {
   checkRegionPlacement(puzzleString, row, column, value) {}
 
   solveSudoku(puzzleString) {
-    const N = 9;
-
-    // Convert board string to a 2D array
-    const board = puzzleString
-      .split("")
-      .map((c) => (c === "." ? 0 : parseInt(c)));
-    const grid = [];
-    for (let i = 0; i < N; i++) {
-      grid.push(board.slice(i * N, i * N + N));
+    // Convert board string into a 2D array
+    let board = [];
+    for (let i = 0; i < 9; i++) {
+        board.push(puzzleString.slice(i * 9, (i + 1) * 9).split('').map(c => (c === '.' ? 0 : parseInt(c))));
     }
 
-    const findEmpty = () => {
-      for (let i = 0; i < N; i++) {
-        for (let j = 0; j < N; j++) {
-          if (grid[i][j] === 0) {
-            return [i, j];
-          }
+    // Check if a number can be placed at board[row][col]
+    function isValid(board, row, col, num) {
+        for (let i = 0; i < 9; i++) {
+            if (board[row][i] === num || board[i][col] === num || board[3 * Math.floor(row / 3) + Math.floor(i / 3)][3 * Math.floor(col / 3) + (i % 3)] === num) {
+                return false;
+            }
         }
-      }
-      return null;
-    };
+        return true;
+    }
 
-    const isValid = (num, row, col) => {
-      // Check row
-      for (let i = 0; i < N; i++) {
-        if (grid[row][i] === num) {
-          return false;
+    // Backtracking function to solve the Sudoku
+    function solve() {
+        for (let row = 0; row < 9; row++) {
+            for (let col = 0; col < 9; col++) {
+                if (board[row][col] === 0) {
+                    for (let num = 1; num <= 9; num++) {
+                        if (isValid(board, row, col, num)) {
+                            board[row][col] = num;
+                            if (solve()) {
+                                return true;
+                            }
+                            board[row][col] = 0; // Undo assignment
+                        }
+                    }
+                    return false; // Trigger backtracking
+                }
+            }
         }
-      }
+        return true; // All cells filled correctly
+    }
 
-      // Check column
-      for (let i = 0; i < N; i++) {
-        if (grid[i][col] === num) {
-          return false;
-        }
-      }
+    if (!solve()) {
+        return false; // Unsolvable
+    }
 
-      // Check 3x3 grid
-      const startRow = Math.floor(row / 3) * 3;
-      const startCol = Math.floor(col / 3) * 3;
-
-      for (let i = 0; i < 3; i++) {
-        for (let j = 0; j < 3; j++) {
-          if (grid[startRow + i][startCol + j] === num) {
-            return false;
-          }
-        }
-      }
-
-      return true;
-    };
-
-    const solve = () => {
-      const emptySpot = findEmpty();
-      if (!emptySpot) {
-        return true; // Puzzle solved
-      }
-
-      const [row, col] = emptySpot;
-
-      for (let num = 1; num <= N; num++) {
-        if (isValid(num, row, col)) {
-          grid[row][col] = num;
-
-          if (solve()) {
-            return true;
-          }
-
-          grid[row][col] = 0; // Reset and backtrack
-        }
-      }
-
-      return false; // Trigger backtracking
-    };
-
-    solve();
-    // Convert solved 2D array back to board string
-    return grid.flat().join("");
+    // Convert 2D array back to string format
+    return board.flat().join('');
   }
-
-  // Example usage
-  // const boardString = "1.5..2.84..63.12.7.2..5.....9..1....8..2...6..3..9..4...8.3.7..4...7..6.5...2.";
-  // const solvedBoard = solveSudoku(boardString);
-
-  // console.log(solvedBoard);
 }
 
 module.exports = SudokuSolver;
