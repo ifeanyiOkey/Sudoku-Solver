@@ -17,7 +17,7 @@ module.exports = function (app) {
     // console.log(coordinate.split("")[0], coordinate.split("")[1]);
     console.log(row, col);
     // validate coordinate
-    if (/[^A-I]/.test(row) || /[^1-9]/.test(col)) {
+    if (/[^A-Ia-i]/.test(row) || /[^1-9]/.test(col)) {
       return res.json({ error: "Invalid coordinate" });
     }
     // validate value
@@ -39,9 +39,6 @@ module.exports = function (app) {
     const validRowPlace = solver.checkRowPlacement(puzzle, row, col, value);
     const validColPlace = solver.checkColPlacement(puzzle, row, col, value);
     const validRegion = solver.checkRegionPlacement(puzzle, row, col, value);
-    console.log(validRowPlace);
-    console.log(validColPlace);
-    console.log(validRegion);
     if (validRowPlace && validColPlace && validRegion) {
       res.json({ 'valid': true });
     } else {
