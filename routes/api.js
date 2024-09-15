@@ -15,19 +15,19 @@ module.exports = function (app) {
       res.json({ error: "Required field(s) missing" });
       return;
     }
-    // // get coordinate
-    // const row = coordinate.charAt(0);
-    // const col = coordinate.charAt(1);
-    // console.log(coordinate.split("")[0], coordinate.split("")[1]);
-    // console.log(row, col);
-    // if (coordinate.length !== 2 || row.match(/[^a-i]/) || col.match(/[^1-9]/)) {
-    //   res.json({ error: "Invalid coordinate" });
-    //   return;
-    // }
-    // if (value.match(/[^1-9]/) || value.length !== 1) {
-    //   console.log(value);
-    //   return res.json({ error: "Invalid value" });
-    // }
+    // get coordinate
+    const row = coordinate.charAt(0);
+    const col = coordinate.charAt(1);
+    console.log(coordinate.split("")[0], coordinate.split("")[1]);
+    console.log(row, col);
+    if (coordinate.length !== 2 || row.match(/[^a-i]/) || col.match(/[^1-9]/)) {
+      res.json({ error: "Invalid coordinate" });
+      return;
+    }
+    if (value.match(/[^1-9]/) || value.length !== 1) {
+      console.log(value);
+      return res.json({ error: "Invalid value" });
+    }
 
     // // Check the value is already in the coordinate of the puzzle.
     // let index = (solver.letterToNumber(row) - 1) * 9 + (+col - 1);
