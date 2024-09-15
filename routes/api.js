@@ -20,12 +20,11 @@ module.exports = function (app) {
     const col = coordinate.charAt(1);
     // console.log(coordinate.split("")[0], coordinate.split("")[1]);
     console.log(row, col);
-    if (coordinate.length !== 2 || row.match(/[^A-I]/) || col.match(/[^1-9]/)) {
+    if (coordinate.length !== 2 || /[^A-I]/.test(row) || /[^1-9]/.test(col)) {
       res.json({ error: "Invalid coordinate" });
       return;
     }
-    if (value.match(/[^1-9]/) || value.length !== 1) {
-      console.log(value);
+    if (/[^1-9]/.test(value) || value.length !== 1) {
       return res.json({ error: "Invalid value" });
     }
 
