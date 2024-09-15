@@ -15,9 +15,8 @@ module.exports = function (app) {
     const row = coordinate.charAt(0);
     const col = coordinate.charAt(1);
     // console.log(coordinate.split("")[0], coordinate.split("")[1]);
-    console.log(row, col);
     // validate coordinate
-    if (/[^A-Ia-i]/.test(row) || /[^1-9]/.test(col)) {
+    if (!/[A-Ia-i]/.test(row) || !/[1-9]/.test(col)) {
       return res.json({ error: "Invalid coordinate" });
     }
     // validate value
