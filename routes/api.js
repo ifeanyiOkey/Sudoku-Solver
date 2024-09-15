@@ -7,10 +7,7 @@ module.exports = function (app) {
 
   app.route("/api/check").post((req, res) => {
     const { puzzle, coordinate, value } = req.body;
-    if (puzzle.length !== 81)
-      return res.json({ error: "Expected puzzle to be 81 characters long" });
-    if (puzzle.match(/[^\d.]/g)) 
-      return res.json({ error: "Invalid characters in puzzle" });
+    
     if (!puzzle || !coordinate || !value) 
       return res.json({ error: "Required field(s) missing" });
     
@@ -27,6 +24,11 @@ module.exports = function (app) {
     if (/[^1-9]/.test(value) || value.length !== 1) {
       return res.json({ error: "Invalid value" });
     }
+
+    if (puzzle.length != 81)
+      return res.json({ error: "Expected puzzle to be 81 characters long" });
+    if (puzzle.match(/[^\d.]/g)) 
+      return res.json({ error: "Invalid characters in puzzle" });
 
     // // Check the value is already in the coordinate of the puzzle.
     // let index = (solver.letterToNumber(row) - 1) * 9 + (+col - 1);
