@@ -7,23 +7,23 @@ module.exports = function (app) {
 
   app.route("/api/check").post((req, res) => {
     const { puzzle, coordinate, value } = req.body;
-    if (solver.validate(puzzle) !== "valid") {
-      res.json({ error: solver.validate(puzzle) });
-      return;
-    }
-    if (!puzzle || !coordinate || !value) {
-      res.json({ error: "Required field(s) missing" });
-      return;
-    }
+    if (puzzle.length !== 81)
+      return res.json({ error: "Expected puzzle to be 81 characters long" });
+    if (puzzle.match(/[^\d.]/g)) 
+      return res.json({ error: "Invalid characters in puzzle" });
+    if (!puzzle || !coordinate || !value) 
+      return res.json({ error: "Required field(s) missing" });
+    
     // get coordinate
     const row = coordinate.charAt(0);
     const col = coordinate.charAt(1);
     // console.log(coordinate.split("")[0], coordinate.split("")[1]);
     console.log(row, col);
-    if (coordinate.length !== 2 || /[^A-I]/.test(row) || /[^1-9]/.test(col)) {
-      res.json({ error: "Invalid coordinate" });
-      return;
+    // validate coordinate
+    if (/[^A-I]/.test(row) || /[^1-9]/.test(col)) {
+      return res.json({ error: "Invalid coordinate" });
     }
+    // validate value
     if (/[^1-9]/.test(value) || value.length !== 1) {
       return res.json({ error: "Invalid value" });
     }
