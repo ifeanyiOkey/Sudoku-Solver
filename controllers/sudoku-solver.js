@@ -37,6 +37,7 @@ class SudokuSolver {
     row = this.letterToNumber(row);
     // Check if value is already in the row
     for (let col = 0; col < 9; col++) {
+      // console.log(board[row - 1][col]);
       if (board[row - 1][col] == value) {
         return false;
       }
